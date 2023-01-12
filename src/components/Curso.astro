@@ -5,11 +5,18 @@ export interface Props{
     imagen: string;
 }
 const {titulo, descripcion, imagen} = Astro.props;
+const backgroundImage = `url(${imagen})`;
 ---
+<style define:vars={{backgroundImage}}>
+    .curso{
+        background-image: linear-gradient(to right, rgb(0 0 0 / 0.65), rgb(0 0 0 /0.85)), var(--backgroundImage);
+    }
+</style>
+
 <section class="curso">
-    <div class="grid">
+    <div class="grid contenedor">
         <div class="contenido">
-            <h3>{titulo}</h3>
+            <h3 class="heading">{titulo}</h3>
             <p>{descripcion}</p>
         </div>
     </div>
