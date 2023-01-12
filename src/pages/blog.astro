@@ -1,0 +1,26 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Entrada from "../components/Entrada.astro";
+const resultado = await fetch(`${import.meta.env.PUBLIC_API_URL}/blogs`);
+const {data} = await resultado.json();
+
+
+---
+
+<Layout title={'Blog'} description={'Sección de blog en la cual se plasman diversos artículos acerca de los nuevos productos lanzados en GuitarLA'}>
+    <h1 class="heading">Blog</h1>
+    <main class="grid">
+        {data?.map(blog => <Entrada 
+            titulo={blog.attributes.titulo}
+            imagen={blog.attributes.imagen}
+            url={blog.attributes.urlBlog}
+            contenido={blog.attributes.contenido}
+            descripcion={blog.attributes.descripcion}
+            fecha={blog.attributes.createdAt}
+        />)}
+    </main>
+</Layout>
+
+<style>
+
+</style>

@@ -1,0 +1,21 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Card from '../components/Card.astro';
+
+const url = `${import.meta.env.PUBLIC_API_URL}/guitarras`;
+const consulta = await fetch(url);
+const {data} = await consulta.json();
+---
+
+<Layout title={'Tienda'} description={'Listado de los productos disponibles dentro de GuitarLA'}>
+    <h1 class="heading">Nuestra Colección</h1>
+    <div class="contenedor">
+        <div class="grid">
+            {data?.map(guitarra => <Card nombre={guitarra.attributes.nombre} imagen={guitarra.attributes.imagen} precio={guitarra.attributes.precio} descripcion={guitarra.attributes.descripcion} url={guitarra.attributes.urlGuitarra}/>)}
+        </div>
+    </div>
+</Layout>
+
+<style>
+
+</style>

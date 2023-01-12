@@ -1,0 +1,104 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+export async function getStaticPaths(){
+    const respuesta = await fetch(`${import.meta.env.PUBLIC_API_URL}/guitarras`);
+    const {data} = await respuesta.json();
+    return data?.map(guitarra => ({
+        params: {
+            id: guitarra.attributes.urlGuitarra
+        },
+        props: {
+            guitarra: guitarra.attributes
+        }
+    }));
+}
+const {id} = Astro.params;
+const {nombre, precio, descripcion, imagen} = Astro.props.guitarra;
+---
+<Layout title={`Guitarra ${nombre}`} description={`La guitarra ${nombre} cuenta con un modulador de volúmen, bajo, graves y agudos que permite al usuario modificar dichas especificaciones`}>
+    <main class="guitarra contenedor">
+        <img src={imagen} alt={`Imagen Guitarra ${nombre}`} />
+        <div class="contenido">
+            <h2 class="heading">{nombre}</h2>
+            <p class="descripcion">{descripcion}</p>
+            <p class="precio">${precio}</p>
+            <form action="POST" class="formulario">
+                <label for="cantidad">Cantidad: </label>
+                <select name="cantidad" id="cantidad">
+                    <option value="0">-- Seleccione --</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select>
+                <input type="submit" value='Agregar al Carrito'>
+            </form>
+        </div>
+    </main>
+</Layout>
+
+<style>
+    .guitarra {
+        display: grid;
+        grid-template-columns: 2fr 3fr;
+        gap: 1rem;
+        align-items: center;
+        max-width: 70rem;
+        margin: 0 auto;
+    }
+    .contenido {
+        padding: 1rem;
+    }
+    .contenido h3 {
+        font-size: 3rem;
+        text-transform: uppercase;
+        color: var(--primary);
+    }
+    .descripcion {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 6;
+        overflow: hidden;
+        font-size: 1.8rem;
+    }
+    .precio {
+        color: var(--primary);
+        font-size: 4rem;
+        margin: 0;
+        font-weight: 900;
+    }
+    .formulario {
+        margin-top: 4rem;
+        display: flex;
+        gap: 1rem;
+        flex-direction: column;
+    }
+    .formulario label {
+        font-size: 2.2rem;
+    }
+    .formulario select {
+        border: 1px solid var(--black);
+        padding: 1rem;
+        text-align: center;
+        border-radius: 1rem;
+    }
+    .formulario input[type="submit"] {
+        display: block;
+        width: 100%;
+        text-transform: uppercase;
+        font-weight: bold;
+        border: none;
+        padding: 1.4rem;
+        background-color: var(--black);
+        color: var(--white);
+        transition-property: background-color;
+        transition-duration: 300ms;
+    }
+    .formulario input[type="submit"]:hover {
+        background-color: var(--primary);
+        cursor: pointer;
+    }
+</style>

@@ -1,0 +1,93 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Card from '../components/Card.astro';
+import Entrada from '../components/Entrada.astro';
+import Curso from '../components/Curso.astro';
+
+const urlGuitarras = `${import.meta.env.PUBLIC_API_URL}/guitarras`;
+const urlBlog = `${import.meta.env.PUBLIC_API_URL}/blogs`;
+const urlCurso = `${import.meta.env.PUBLIC_API_URL}/cursos`;
+const [respuestaGuitarras, respuestaBlogs, respuestaCursos ] = await Promise.all([
+	fetch(urlGuitarras),
+	fetch(urlBlog),
+	fetch(urlCurso)
+]);
+
+const [{data: guitarras}, {data: blogs}, {data: cursos}] = await Promise.all([respuestaGuitarras.json(), respuestaBlogs.json(), respuestaCursos.json()]);
+---
+
+<Layout title="Inicio" description="Página web que consiste en la compra-venta de guitarras eléctrica">
+	<section class="contenedor">
+		<h1 class="heading">Nuestra Colección</h1>
+
+		<div class="grid">
+			{guitarras?.map(guitarra => <Card nombre={guitarra.attributes.nombre} imagen={guitarra.attributes.imagen} precio={guitarra.attributes.precio} descripcion={guitarra.attributes.descripcion} url={guitarra.attributes.urlGuitarra}/>)}
+		</div>
+	</section>
+
+	{cursos?.map(curso => <Curso 
+		titulo={curso.attributes.titulo}
+		imagen={curso.attributes.imagen}
+		descripcion={curso.attributes.descripcion}
+
+	/>)}
+
+	<section class="contenedor">
+		<h2 class="heading">Blog</h2>
+		<div class="grid">
+			{blogs?.map(blog => <Entrada 
+				titulo={blog.attributes.titulo}
+				imagen={blog.attributes.imagen}
+				url={blog.attributes.urlBlog}
+				contenido={blog.attributes.contenido}
+				descripcion={blog.attributes.descripcion}
+				fecha={blog.attributes.createdAt}
+			/>)}
+		</div>
+	</section>
+</Layout>
+
+<style>
+	main {
+		margin: auto;
+		padding: 1.5rem;
+		max-width: 60ch;
+	}
+	h1 {
+		font-size: 3rem;
+		font-weight: 800;
+		margin: 0;
+	}
+	.text-gradient {
+		background-image: var(--accent-gradient);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-size: 400%;
+		background-position: 0%;
+	}
+	.instructions {
+		line-height: 1.6;
+		margin: 1rem 0;
+		border: 1px solid rgba(var(--accent), 25%);
+		background-color: white;
+		padding: 1rem;
+		border-radius: 0.4rem;
+	}
+	.instructions code {
+		font-size: 0.875em;
+		font-weight: bold;
+		background: rgba(var(--accent), 12%);
+		color: rgb(var(--accent));
+		border-radius: 4px;
+		padding: 0.3em 0.45em;
+	}
+	.instructions strong {
+		color: rgb(var(--accent));
+	}
+	.link-card-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
+		gap: 1rem;
+		padding: 0;
+	}
+</style>

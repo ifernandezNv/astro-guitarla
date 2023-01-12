@@ -1,0 +1,39 @@
+---
+export interface Props{
+    titulo: string;
+    descripcion: string;
+    imagen: string;
+}
+const {titulo, descripcion, imagen} = Astro.props;
+---
+<section class="curso">
+    <div class="grid">
+        <div class="contenido">
+            <h3>{titulo}</h3>
+            <p>{descripcion}</p>
+        </div>
+    </div>
+</section>
+
+<style>
+    .curso {
+        padding: 10rem 0;
+        margin-top: 10rem;
+        background-size: cover;
+        background-position: center center;
+    }
+    @media (min-width: 768px) {
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .contenido {
+            grid-column: 2 / 3;
+        }
+    }
+    .curso p {
+        text-align: center;
+        font-size: 2.4rem;
+        color: var(--white);
+    }
+</style>
